@@ -64,6 +64,61 @@ section { padding: 50px 20px; }
 
 </section>
 
+<div style="padding:30px 20px;text-align:center">
+<h2>NANOX Product Verification</h2>
+<p>Enter your verification code</p>
+
+<input id="code" placeholder="NANOX-000001"
+style="padding:15px;width:90%;max-width:320px">
+
+<br><br>
+
+<button onclick="verifyCode()"
+style="padding:15px 30px;background:#063b55;color:white;border:0;border-radius:8px">
+VERIFY
+</button>
+
+<p id="result"></p>
+</div>
+
+<script>
+async function verifyCode() {
+const code = document.getElementById("code").value.trim();
+const result = document.getElementById("result");
+
+if (!code) {
+result.textContent = "Enter your code";
+return;
+}
+
+result.textContent = "Checking...";
+
+try {
+const response = await fetch(
+"https://qvnvujxyljovsioicuhv.supabase.co/functions/v1/swift-responder",
+{
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+"apikey": "sb_publishable_rRa83-u09GY_9CkxkviX2A_sawH3mIQ
+"Authorization": "Bearer sb_publishable_rRa83-u09GY_9CkxkviX2A_sawH3mIQ
+},
+body: JSON.stringify({code: code})
+}
+);
+
+const data = await response.json();
+
+result.textContent = data.valid
+? "Original NANOX product"
+: "Code not found";
+
+} catch (error) {
+result.textContent = "Connection error";
+}
+}
+</script>
+
 </body>
 
 </html>
